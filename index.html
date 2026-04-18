@@ -987,7 +987,9 @@ async function syncToSheets() {
       const pullData = await jsonpPull(state.gasUrl);
       if (pullData.ok && pullData.transactions && pullData.transactions.length > 0) {
         const localIds = new Set(state.transactions.map(t => t.id));
-        const remoteNew = pullData.transactions.filter(t => !localIds.has(t.id));
+        const remoteNew = pullData.transactions
+          .filter(t => !localIds.has(t.id))
+          .map(t => ({ ...t, date: normalizeDate(t.date) }));
         state.transactions = [...state.transactions, ...remoteNew];
       }
     } catch(pullErr) { /* continue even if pull fails */ }
@@ -1013,6 +1015,20 @@ async function syncToSheets() {
   }
   btn.textContent = '⇅ Sync';
   btn.disabled = false;
+}
+
+// Normalize date to YYYY-MM-DD
+function normalizeDate(d) {
+  if (!d) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(d)) return d; // already correct
+  const parsed = new Date(d);
+  if (!isNaN(parsed)) {
+    const y = parsed.getFullYear();
+    const m = String(parsed.getMonth()+1).padStart(2,'0');
+    const day = String(parsed.getDate()).padStart(2,'0');
+    return y+'-'+m+'-'+day;
+  }
+  return d;
 }
 
 // JSONP pull — works across origins on mobile browsers
@@ -1044,7 +1060,9 @@ async function autoPullOnStart() {
     const data = await jsonpPull(state.gasUrl);
     if (!data.ok || !data.transactions) return;
     const localIds = new Set(state.transactions.map(t => t.id));
-    const remoteNew = data.transactions.filter(t => !localIds.has(t.id));
+    const remoteNew = data.transactions
+      .filter(t => !localIds.has(t.id))
+      .map(t => ({ ...t, date: normalizeDate(t.date) }));
     if (remoteNew.length > 0) {
       state.transactions = [...state.transactions, ...remoteNew];
       state.lastSync = new Date().toISOString();
