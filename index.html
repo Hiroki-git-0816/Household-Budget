@@ -178,17 +178,8 @@
   .ai-dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
 
-  /* Mobile tx card layout */
-  .tx-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
-  .tx-card-main { flex: 1; min-width: 0; }
-  .tx-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-  .tx-card-date { font-size: 11px; color: var(--text3); }
-  .tx-card-amount { font-family: var(--font-mono); font-size: 15px; font-weight: 500; }
-  .tx-card-store { font-size: 14px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tx-card-bottom { display: flex; align-items: center; gap: 6px; }
-  .tx-card-memo { font-size: 11px; color: var(--text3); }
-  .tx-card-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
-  .tx-card-actions button { width: 32px !important; padding: 5px !important; justify-content: center; }
+  /* Mobile tx card layout - unused */
+
 
   @media (max-width: 640px) {
     /* Layout */
@@ -221,17 +212,28 @@
     .form-card { padding: 14px; }
     .form-group input, .form-group select { font-size: 16px; padding: 10px; }
 
-    /* Transaction table — card style on mobile */
+    /* Transaction table - mobile */
+    .tx-table { display: block; overflow: hidden; }
     .tx-table thead { display: none; }
-    .tx-table, .tx-table tbody, .tx-table tr { display: block; width: 100%; }
-    .tx-table td { display: block; }
-    .tx-table tr { padding: 0; border-bottom: 1px solid var(--surface2); }
+    .tx-table tbody { display: block; }
+    .tx-table tr {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto auto;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--surface2);
+      gap: 2px 8px;
+    }
     .tx-table tr:last-child { border-bottom: none; }
-    .tx-table tr:hover td { background: none; }
-    .tx-table td { padding: 0; border: none; }
-    .tx-table td:not(:first-child) { display: none; }
-    .tx-table td:first-child { display: block; }
-    .tx-actions { opacity: 1; }
+    .tx-table td { display: block; padding: 0; border: none; }
+    .tx-table td:nth-child(1) { grid-column: 1; grid-row: 1; font-size: 11px; color: var(--text3); }
+    .tx-table td:nth-child(2) { grid-column: 1; grid-row: 2; font-size: 14px; font-weight: 500; }
+    .tx-table td:nth-child(3) { grid-column: 1; grid-row: 3; }
+    .tx-table td:nth-child(4) { grid-column: 2; grid-row: 1 / 3; display: flex; align-items: center; font-size: 14px; font-weight: 500; }
+    .tx-table td:nth-child(5) { display: none; }
+    .tx-table td:nth-child(6) { grid-column: 2; grid-row: 3; display: flex; justify-content: flex-end; }
+    .tx-actions { opacity: 1; display: flex; flex-direction: row; gap: 4px; }
+    .tx-actions button { width: 30px; height: 30px; padding: 0; display: flex; align-items: center; justify-content: center; }
 
     /* Search bar */
     .section-header { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -676,46 +678,20 @@ function renderTxRows(bodyId, txs) {
     body.innerHTML = '<tr><td colspan="6" class="empty-state">No transactions</td></tr>';
     return;
   }
-  const isMobile = window.innerWidth < 640;
-  if (isMobile) {
-    body.innerHTML = txs.map(t => `
-      <tr>
-        <td>
-          <div class="tx-card">
-            <div class="tx-card-main">
-              <div class="tx-card-top">
-                <span class="tx-card-date">${t.date}</span>
-                <span class="${t.type==='Income'?'amount-income':'amount-expense'} tx-card-amount">${t.type==='Income'?'+':'-'}${t.amount.toFixed(2)}</span>
-              </div>
-              <div class="tx-card-store">${t.store}</div>
-              <div class="tx-card-bottom">
-                <span class="category-tag">${t.category}</span>
-                ${t.memo ? `<span class="tx-card-memo">${t.memo}</span>` : ''}
-              </div>
-            </div>
-            <div class="tx-card-actions">
-              <button class="btn btn-sm btn-icon" onclick="editTx('${t.id}')">✎</button>
-              <button class="btn btn-sm btn-danger btn-icon" onclick="deleteTx('${t.id}')">✕</button>
-            </div>
-          </div>
-        </td>
-      </tr>`).join('');
-  } else {
-    body.innerHTML = txs.map(t => `
-      <tr>
-        <td style="color:var(--text2); white-space:nowrap;">${t.date}</td>
-        <td>${t.store}</td>
-        <td><span class="category-tag">${t.category}</span></td>
-        <td><span class="${t.type==='Income'?'amount-income':'amount-expense'}">${t.type==='Income'?'+':'-'}${t.amount.toFixed(2)}</span></td>
-        <td style="color:var(--text3);">${t.memo || ''}</td>
-        <td>
-          <div class="tx-actions">
-            <button class="btn btn-sm btn-icon" onclick="editTx('${t.id}')" title="Edit">✎</button>
-            <button class="btn btn-sm btn-danger btn-icon" onclick="deleteTx('${t.id}')" title="Delete">✕</button>
-          </div>
-        </td>
-      </tr>`).join('');
-  }
+  body.innerHTML = txs.map(t => `
+    <tr>
+      <td style="color:var(--text2); white-space:nowrap;">${t.date}</td>
+      <td>${t.store}</td>
+      <td><span class="category-tag">${t.category}</span></td>
+      <td><span class="${t.type==='Income'?'amount-income':'amount-expense'}">${t.type==='Income'?'+':'-'}${t.amount.toFixed(2)}</span></td>
+      <td style="color:var(--text3);">${t.memo || ''}</td>
+      <td>
+        <div class="tx-actions">
+          <button class="btn btn-sm btn-icon" onclick="editTx('${t.id}')" title="Edit">✎</button>
+          <button class="btn btn-sm btn-danger btn-icon" onclick="deleteTx('${t.id}')" title="Delete">✕</button>
+        </div>
+      </td>
+    </tr>`).join('');
 }
 
 // Charts
