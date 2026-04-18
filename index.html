@@ -443,6 +443,10 @@
         <input type="password" id="apiKey" placeholder="sk-ant-..." style="width:100%;">
       </div>
     </div>
+    <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+      <p style="font-size:12px; color:var(--text2); margin-bottom:8px;">Danger zone — clears all local data on this device. Use before pulling from Sheets on a new device.</p>
+      <button class="btn btn-danger btn-sm" onclick="clearLocalData()">Clear local data</button>
+    </div>
     <div class="modal-actions">
       <button class="btn" onclick="closeSetup()">Cancel</button>
       <button class="btn btn-primary" onclick="saveSetup()">Save settings</button>
@@ -953,6 +957,25 @@ function openSetup() {
 
 function closeSetup() { document.getElementById('setupModal').classList.remove('open'); }
 
+function clearLocalData() {
+  if (!confirm('Clear all local data on this device? This cannot be undone. Make sure your data is synced to Google Sheets first.')) return;
+  const gasUrl = state.gasUrl;
+  const apiKey = state.apiKey;
+  const rules = state.rules;
+  localStorage.clear();
+  state.transactions = [];
+  state.unsyncedIds = new Set();
+  state.lastSync = null;
+  state.gasUrl = gasUrl;
+  state.apiKey = apiKey;
+  state.rules = rules;
+  save();
+  renderAll();
+  updateSyncIndicator();
+  closeSetup();
+  toast('Local data cleared — press Pull to get data from Sheets', 'success');
+}
+
 function saveSetup() {
   state.gasUrl = document.getElementById('gasUrl').value.trim();
   state.apiKey = document.getElementById('apiKey').value.trim();
@@ -1006,6 +1029,7 @@ async function syncToSheets() {
   btn.disabled = false;
 }
 
+// Manual pull button
 // Normalize date to YYYY-MM-DD
 function normalizeDate(d) {
   if (!d) return '';
