@@ -12,7 +12,7 @@
     --accent: #1a6b4a; --accent-light: #e1f0e9;
     --accent2: #c45c1e; --accent2-light: #fdf0e8;
     --danger: #c0392b; --danger-light: #fdf0ef;
-    --radius: 10px; --radius-lg: 16px;
+    --radius: 10px; --radius-lg: 16px;h
     --font: 'DM Sans', system-ui, sans-serif;
     --font-mono: 'DM Mono', monospace;
   }
@@ -709,7 +709,7 @@ function updateSyncIndicator(){
 
 // Upload
 async function uploadToSheets(){
-  if(!state.gasUrl){openSetup();return;}
+  if(!state.gasUrl){openSetup();return;} if(state.transactions.length===0){if(!confirm('ローカルにデータが0件です。\nPullを先に実行しましたか？\n\nそのままUploadすると、スプレッドシートのデータが全て消えます。\n\n続行しますか？')) return;}
   const btns=[document.getElementById('uploadBtn'),document.getElementById('uploadBtnM')].filter(Boolean);
   btns.forEach(b=>{b.textContent='↻';b.disabled=true;});
   const dot=document.getElementById('syncDot'); if(dot) dot.className='sync-dot syncing';
