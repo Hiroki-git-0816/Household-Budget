@@ -982,19 +982,7 @@ async function syncToSheets() {
   document.getElementById('syncDot').className = 'sync-dot syncing';
 
   try {
-    // Step 1: Pull from Sheets first using JSONP (works on mobile)
-    try {
-      const pullData = await jsonpPull(state.gasUrl);
-      if (pullData.ok && pullData.transactions && pullData.transactions.length > 0) {
-        const localIds = new Set(state.transactions.map(t => t.id));
-        const remoteNew = pullData.transactions
-          .filter(t => !localIds.has(t.id))
-          .map(t => ({ ...t, date: normalizeDate(t.date) }));
-        state.transactions = [...state.transactions, ...remoteNew];
-      }
-    } catch(pullErr) { /* continue even if pull fails */ }
-
-    // Step 2: Push all local data to Sheets
+    // Push only — Pull happens on app open via autoPullOnStart
     const payload = { action: 'sync', transactions: state.transactions, summary: buildSummary() };
     await fetch(state.gasUrl, {
       method: 'POST',
@@ -1008,7 +996,7 @@ async function syncToSheets() {
     save();
     renderAll();
     updateSyncIndicator();
-    toast('Synced with Google Sheets!', 'success');
+    toast('Pushed to Google Sheets!', 'success');
   } catch(e) {
     toast('Sync failed — check your GAS URL', 'error');
     document.getElementById('syncDot').className = 'sync-dot pending';
