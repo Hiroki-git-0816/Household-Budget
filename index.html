@@ -26,29 +26,29 @@
     --font-mono: 'DM Mono', monospace;
   }
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap');
- 
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: var(--font); background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; min-height: 100vh; }
- 
+
   /* Layout */
   .app { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
   .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; flex-wrap: wrap; gap: 12px; }
   .header-left h1 { font-size: 22px; font-weight: 500; letter-spacing: -0.3px; }
   .header-left p { font-size: 13px; color: var(--text2); margin-top: 2px; }
   .header-right { display: flex; gap: 8px; align-items: center; }
- 
+
   /* Nav / Month switcher */
   .month-nav { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 12px; }
   .month-nav button { background: none; border: none; cursor: pointer; color: var(--text2); font-size: 16px; padding: 2px 6px; border-radius: 4px; }
   .month-nav button:hover { background: var(--surface2); color: var(--text); }
   .month-nav span { font-size: 14px; font-weight: 500; min-width: 100px; text-align: center; }
- 
+
   /* Tabs */
   .tabs { display: flex; gap: 2px; background: var(--surface2); border-radius: var(--radius); padding: 3px; margin-bottom: 20px; }
   .tab { flex: 1; padding: 7px 12px; border: none; background: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--text2); font-family: var(--font); transition: all 0.15s; }
   .tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
   .tab:hover:not(.active) { color: var(--text); }
- 
+
   /* Summary cards */
   .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
   .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
@@ -59,7 +59,7 @@
   .summary-card.balance .amount { color: var(--text); }
   .summary-card.balance.positive .amount { color: var(--accent); }
   .summary-card.balance.negative .amount { color: var(--danger); }
- 
+
   /* Buttons */
   .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; font-family: var(--font); transition: all 0.15s; white-space: nowrap; }
   .btn:hover { background: var(--surface2); border-color: #ccc; }
@@ -69,7 +69,7 @@
   .btn-danger:hover { background: #fde8e6; }
   .btn-sm { padding: 5px 10px; font-size: 12px; }
   .btn-icon { padding: 6px 8px; }
- 
+
   /* Form */
   .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
   .form-card h2 { font-size: 15px; font-weight: 500; margin-bottom: 16px; }
@@ -84,7 +84,7 @@
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); background: var(--surface); }
   .form-actions { display: flex; gap: 8px; margin-top: 14px; justify-content: flex-end; }
   .form-group.full { grid-column: 1 / -1; }
- 
+
   /* Transaction list */
   .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .section-header h2 { font-size: 15px; font-weight: 500; }
@@ -92,7 +92,7 @@
   .search-bar input { padding: 7px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: var(--font); background: var(--surface); color: var(--text); outline: none; width: 180px; }
   .search-bar input:focus { border-color: var(--accent); }
   .search-bar select { padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: var(--font); background: var(--surface); color: var(--text); outline: none; }
- 
+
   .tx-table { width: 100%; border-collapse: collapse; }
   .tx-table th { font-size: 11px; font-weight: 500; color: var(--text3); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.4px; }
   .tx-table td { padding: 10px 12px; border-bottom: 1px solid var(--surface2); font-size: 13px; vertical-align: middle; }
@@ -107,16 +107,16 @@
   .tx-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
   tr:hover .tx-actions { opacity: 1; }
   .empty-state { text-align: center; padding: 40px; color: var(--text3); font-size: 13px; }
- 
+
   /* Card wrapper for table */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
- 
+
   /* Chart section */
   .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
   .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; }
   .chart-card h3 { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 14px; }
   .chart-container { position: relative; height: 220px; }
- 
+
   /* Category breakdown */
   .category-list { display: flex; flex-direction: column; gap: 8px; }
   .category-row { display: flex; align-items: center; gap: 10px; }
@@ -124,14 +124,14 @@
   .category-row .bar-wrap { flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
   .category-row .bar { height: 100%; background: var(--accent2); border-radius: 3px; transition: width 0.4s ease; }
   .category-row .val { font-family: var(--font-mono); font-size: 12px; color: var(--text2); min-width: 80px; text-align: right; }
- 
+
   /* Modal */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 100; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border-radius: var(--radius-lg); padding: 24px; width: 90%; max-width: 560px; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
   .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 16px; }
   .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
- 
+
   /* Import modal */
   .import-preview { margin-top: 12px; max-height: 300px; overflow-y: auto; }
   .import-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 12px; }
@@ -143,20 +143,20 @@
   .import-status.new { background: var(--accent-light); color: var(--accent); }
   .import-status.dup { background: var(--surface2); color: var(--text3); }
   .import-status.ignored { background: #fef9e7; color: #a07800; }
- 
+
   /* Setup modal */
   .setup-step { padding: 12px 0; border-bottom: 1px solid var(--border); }
   .setup-step:last-child { border-bottom: none; }
   .setup-step h3 { font-size: 13px; font-weight: 500; margin-bottom: 6px; }
   .setup-step p { font-size: 12px; color: var(--text2); margin-bottom: 8px; }
   .setup-step code { font-size: 11px; background: var(--surface2); padding: 2px 6px; border-radius: 4px; font-family: var(--font-mono); display: block; word-break: break-all; margin-bottom: 6px; }
- 
+
   /* Rule manager */
   .rule-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--surface2); font-size: 12px; }
   .rule-row:last-child { border-bottom: none; }
   .rule-keyword { font-family: var(--font-mono); background: var(--surface2); padding: 2px 8px; border-radius: 4px; flex: 1; }
   .rule-ignored { font-style: italic; color: var(--text3); }
- 
+
   /* Sync status */
   .sync-indicator { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
   .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); }
@@ -164,20 +164,20 @@
   .sync-dot.pending { background: #e0a800; }
   .sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
- 
+
   /* Toast */
   .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: white; padding: 10px 16px; border-radius: var(--radius); font-size: 13px; z-index: 200; opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.success { background: var(--accent); }
   .toast.error { background: var(--danger); }
- 
+
   /* AI loader */
   .ai-loading { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text2); padding: 8px 0; }
   .ai-dots span { display: inline-block; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: bounce 1.2s infinite; margin-right: 3px; }
   .ai-dots span:nth-child(2) { animation-delay: 0.2s; }
   .ai-dots span:nth-child(3) { animation-delay: 0.4s; }
   @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
- 
+
   @media (max-width: 640px) {
     .summary-grid { grid-template-columns: 1fr; }
     .charts-grid { grid-template-columns: 1fr; }
@@ -203,14 +203,14 @@
       <button class="btn btn-primary btn-sm" onclick="openAddForm()">+ Add</button>
     </div>
   </div>
- 
+
   <!-- Month nav + tabs -->
   <div class="month-nav" style="margin-bottom:16px; display:inline-flex;">
     <button onclick="changeMonth(-1)">‹</button>
     <span id="currentMonth"></span>
     <button onclick="changeMonth(1)">›</button>
   </div>
- 
+
   <div class="tabs">
     <button class="tab active" onclick="switchTab('overview', this)">Overview</button>
     <button class="tab" onclick="switchTab('transactions', this)">Transactions</button>
@@ -218,7 +218,7 @@
     <button class="tab" onclick="switchTab('import', this)">Import CSV</button>
     <button class="tab" onclick="switchTab('rules', this)">Auto-rules</button>
   </div>
- 
+
   <!-- Overview tab -->
   <div id="tab-overview">
     <div class="summary-grid">
@@ -235,7 +235,7 @@
         <div class="amount" id="sumBalance">CAD 0.00</div>
       </div>
     </div>
- 
+
     <!-- Category breakdown -->
     <div class="card" style="padding:18px; margin-bottom:16px;">
       <div class="section-header">
@@ -243,7 +243,7 @@
       </div>
       <div class="category-list" id="categoryBreakdown"></div>
     </div>
- 
+
     <!-- Recent transactions -->
     <div class="card">
       <div style="padding:14px 16px; border-bottom:1px solid var(--border);">
@@ -259,7 +259,7 @@
       </table>
     </div>
   </div>
- 
+
   <!-- Transactions tab -->
   <div id="tab-transactions" style="display:none;">
     <div class="section-header">
@@ -285,7 +285,7 @@
       </table>
     </div>
   </div>
- 
+
   <!-- Charts tab -->
   <div id="tab-charts" style="display:none;">
     <div class="charts-grid">
@@ -309,7 +309,7 @@
       </div>
     </div>
   </div>
- 
+
   <!-- Import tab -->
   <div id="tab-import" style="display:none;">
     <div class="form-card">
@@ -330,7 +330,7 @@
       </div>
     </div>
   </div>
- 
+
   <!-- Rules tab -->
   <div id="tab-rules" style="display:none;">
     <div class="form-card" style="margin-bottom:16px;">
@@ -361,7 +361,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- Add/Edit Transaction Modal -->
 <div class="modal-overlay" id="txModal">
   <div class="modal">
@@ -401,7 +401,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- Import detail modal -->
 <div class="modal-overlay" id="importModal">
   <div class="modal">
@@ -413,7 +413,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- Setup modal -->
 <div class="modal-overlay" id="setupModal">
   <div class="modal">
@@ -448,14 +448,14 @@
     </div>
   </div>
 </div>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <script>
 const CATEGORIES = ['Grocery','Rent','Household','Personal (Hiroki)','Personal (Haruka)','Internet','Car','Entertainment','Special Expense','Salary','Other Expense','Other Income'];
 const EXPENSE_CATS = ['Grocery','Rent','Household','Personal (Hiroki)','Personal (Haruka)','Internet','Car','Entertainment','Special Expense','Other Expense'];
 const INCOME_CATS = ['Salary','Other Income'];
- 
+
 let state = {
   transactions: [],
   rules: [],
@@ -467,9 +467,9 @@ let state = {
   apiKey: '',
   unsyncedIds: new Set()
 };
- 
+
 let charts = {};
- 
+
 // Init
 function init() {
   const saved = localStorage.getItem('budgetState');
@@ -488,7 +488,7 @@ function init() {
   updateSyncIndicator();
   autoPullOnStart();
 }
- 
+
 function save() {
   localStorage.setItem('budgetState', JSON.stringify({
     transactions: state.transactions,
@@ -499,7 +499,7 @@ function save() {
     lastSync: state.lastSync || null
   }));
 }
- 
+
 function populateCategorySelects() {
   ['fCategory','filterCategory'].forEach(id => {
     const el = document.getElementById(id);
@@ -523,13 +523,13 @@ function populateCategorySelects() {
     });
   }
 }
- 
+
 // Month
 function updateMonthDisplay() {
   const d = new Date(state.currentYear, state.currentMonth);
   document.getElementById('currentMonth').textContent = d.toLocaleDateString('en-CA', {year:'numeric', month:'long'});
 }
- 
+
 function changeMonth(dir) {
   state.currentMonth += dir;
   if (state.currentMonth > 11) { state.currentMonth = 0; state.currentYear++; }
@@ -537,14 +537,14 @@ function changeMonth(dir) {
   updateMonthDisplay();
   renderAll();
 }
- 
+
 function getMonthKey(y, m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
- 
+
 function monthTxs() {
   const key = getMonthKey(state.currentYear, state.currentMonth);
   return state.transactions.filter(t => t.date.startsWith(key));
 }
- 
+
 // Render all
 function renderAll() {
   renderSummary();
@@ -554,7 +554,7 @@ function renderAll() {
   renderCharts();
   renderRules();
 }
- 
+
 function renderSummary() {
   const txs = monthTxs();
   const income = txs.filter(t => t.type === 'Income').reduce((s,t) => s + t.amount, 0);
@@ -566,7 +566,7 @@ function renderSummary() {
   const bc = document.getElementById('balanceCard');
   bc.className = 'summary-card balance' + (balance >= 0 ? ' positive' : ' negative');
 }
- 
+
 function renderCategoryBreakdown() {
   const txs = monthTxs().filter(t => t.type === 'Expense');
   const totals = {};
@@ -582,12 +582,12 @@ function renderCategoryBreakdown() {
       <div class="val">CAD ${amt.toFixed(2)}</div>
     </div>`).join('');
 }
- 
+
 function renderRecentTx() {
   const txs = monthTxs().slice().sort((a,b) => b.date.localeCompare(a.date)).slice(0, 8);
   renderTxRows('recentBody', txs);
 }
- 
+
 function renderTransactions() {
   const search = (document.getElementById('searchInput')?.value || '').toLowerCase();
   const catFilter = document.getElementById('filterCategory')?.value || '';
@@ -600,7 +600,7 @@ function renderTransactions() {
   txs.sort((a,b) => b.date.localeCompare(a.date));
   renderTxRows('txBody', txs);
 }
- 
+
 function renderTxRows(bodyId, txs) {
   const body = document.getElementById(bodyId);
   if (!txs.length) {
@@ -622,14 +622,14 @@ function renderTxRows(bodyId, txs) {
       </td>
     </tr>`).join('');
 }
- 
+
 // Charts
 function renderCharts() {
   renderMonthlyChart();
   renderPieChart();
   renderIncomeChart();
 }
- 
+
 function getLast6Months() {
   const months = [];
   for (let i = 5; i >= 0; i--) {
@@ -640,11 +640,11 @@ function getLast6Months() {
   }
   return months;
 }
- 
+
 const CAT_COLORS = {
   'Grocery': '#2d8f5e','Rent': '#c45c1e','Household': '#6b7eb8','Personal (Hiroki)': '#a05cb8','Personal (Haruka)': '#d4587a','Internet': '#5ca8b8','Car': '#8b7355','Entertainment': '#b8a030','Special Expense': '#c0392b','Salary': '#1a6b4a','Other Expense': '#888780','Other Income': '#4a9e6b'
 };
- 
+
 function renderMonthlyChart() {
   const months = getLast6Months();
   const labels = months.map(({y,m}) => new Date(y,m).toLocaleDateString('en-CA',{month:'short',year:'2-digit'}));
@@ -664,7 +664,7 @@ function renderMonthlyChart() {
     backgroundColor: '#1a6b4a',
     stack: 'income'
   });
- 
+
   if (charts.monthly) charts.monthly.destroy();
   const ctx = document.getElementById('monthlyChart');
   if (!ctx) return;
@@ -680,7 +680,7 @@ function renderMonthlyChart() {
     }
   });
 }
- 
+
 function renderPieChart() {
   const txs = monthTxs().filter(t => t.type === 'Expense');
   const totals = {};
@@ -698,7 +698,7 @@ function renderPieChart() {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels:{font:{size:11}, boxWidth:12} } } }
   });
 }
- 
+
 function renderIncomeChart() {
   const txs = monthTxs().filter(t => t.type === 'Income');
   const totals = {};
@@ -716,7 +716,7 @@ function renderIncomeChart() {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels:{font:{size:11}, boxWidth:12} } } }
   });
 }
- 
+
 // Tabs
 function switchTab(name, el) {
   ['overview','transactions','charts','import','rules'].forEach(t => {
@@ -726,7 +726,7 @@ function switchTab(name, el) {
   el.classList.add('active');
   if (name === 'charts') renderCharts();
 }
- 
+
 // Add/Edit modal
 function openAddForm() {
   state.editingId = null;
@@ -739,7 +739,7 @@ function openAddForm() {
   document.getElementById('fMemo').value = '';
   document.getElementById('txModal').classList.add('open');
 }
- 
+
 function editTx(id) {
   const t = state.transactions.find(x => x.id === id);
   if (!t) return;
@@ -753,9 +753,9 @@ function editTx(id) {
   document.getElementById('fMemo').value = t.memo || '';
   document.getElementById('txModal').classList.add('open');
 }
- 
+
 function closeModal() { document.getElementById('txModal').classList.remove('open'); }
- 
+
 function saveTx() {
   const date = document.getElementById('fDate').value;
   const type = document.getElementById('fType').value;
@@ -763,9 +763,9 @@ function saveTx() {
   const store = document.getElementById('fStore').value.trim();
   const category = document.getElementById('fCategory').value;
   const memo = document.getElementById('fMemo').value.trim();
- 
+
   if (!date || isNaN(amount) || amount <= 0 || !store) { toast('Please fill in all required fields', 'error'); return; }
- 
+
   if (state.editingId) {
     const idx = state.transactions.findIndex(x => x.id === state.editingId);
     if (idx >= 0) {
@@ -784,7 +784,7 @@ function saveTx() {
   renderAll();
   updateSyncIndicator();
 }
- 
+
 function deleteTx(id) {
   if (!confirm('Delete this transaction?')) return;
   state.transactions = state.transactions.filter(x => x.id !== id);
@@ -794,7 +794,7 @@ function deleteTx(id) {
   updateSyncIndicator();
   toast('Deleted');
 }
- 
+
 // CSV Import
 async function handleCSV() {
   const file = document.getElementById('csvFile').files[0];
@@ -812,20 +812,20 @@ async function handleCSV() {
     const type = isDebit ? 'Expense' : 'Income';
     return { date, desc, amount: Math.abs(amount), type };
   }).filter(r => !isNaN(r.amount) && r.amount > 0);
- 
+
   // Apply rules
   const processed = parsed.map(r => {
     const rule = state.rules.find(ru => r.desc.toUpperCase().includes(ru.keyword.toUpperCase()));
     const isDup = state.transactions.some(t => t.date === r.date && Math.abs(t.amount - r.amount) < 0.01 && t.store === r.desc);
     return { ...r, category: rule ? rule.category : null, ignored: rule?.category === '__ignore__', isDup, needsAI: !rule && !isDup };
   });
- 
+
   state.pendingImport = processed;
- 
+
   // Show preview
   const preview = document.getElementById('importPreview');
   const toAI = processed.filter(r => r.needsAI && !r.isDup);
- 
+
   if (toAI.length > 0 && state.apiKey) {
     document.getElementById('aiLoadingImport').style.display = 'flex';
     const categories = await aiCategorize(toAI.map(r => ({ desc: r.desc, type: r.type })));
@@ -834,14 +834,14 @@ async function handleCSV() {
   } else if (toAI.length > 0) {
     toAI.forEach(r => { r.category = r.type === 'Income' ? 'Other Income' : 'Other Expense'; });
   }
- 
+
   renderImportPreview(processed);
 }
- 
+
 function renderImportPreview(rows) {
   const preview = document.getElementById('importPreview');
   if (!rows.length) { preview.innerHTML = '<p style="color:var(--text2);font-size:12px;margin-top:12px;">No valid rows found.</p>'; return; }
- 
+
   preview.innerHTML = `
     <div style="margin-top:12px; font-size:12px; color:var(--text2); margin-bottom:8px;">
       ${rows.filter(r=>!r.isDup && !r.ignored).length} new · 
@@ -859,10 +859,10 @@ function renderImportPreview(rows) {
             ${CATEGORIES.map(c=>`<option value="${c}" ${r.category===c?'selected':''}>${c}</option>`).join('')}
           </select>`}
       </div>`).join('')}`;
- 
+
   document.getElementById('importActions').style.display = 'flex';
 }
- 
+
 async function aiCategorize(items) {
   if (!state.apiKey) return items.map(() => 'Other Expense');
   try {
@@ -870,7 +870,7 @@ async function aiCategorize(items) {
 Respond with ONLY a JSON array of category strings, one per item, in the same order.
 Items:
 ${items.map((it,i)=>`${i+1}. "${it.desc}" (${it.type})`).join('\n')}`;
- 
+
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': state.apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
@@ -885,7 +885,7 @@ ${items.map((it,i)=>`${i+1}. "${it.desc}" (${it.type})`).join('\n')}`;
     return items.map(it => it.type === 'Income' ? 'Other Income' : 'Other Expense');
   }
 }
- 
+
 function confirmImport() {
   const toImport = state.pendingImport.filter(r => !r.isDup && !r.ignored);
   toImport.forEach(r => {
@@ -899,16 +899,16 @@ function confirmImport() {
   clearImport();
   toast(`Imported ${toImport.length} transactions`, 'success');
 }
- 
+
 function clearImport() {
   state.pendingImport = [];
   document.getElementById('importPreview').innerHTML = '';
   document.getElementById('importActions').style.display = 'none';
   document.getElementById('csvFile').value = '';
 }
- 
+
 function closeImportModal() { document.getElementById('importModal').classList.remove('open'); }
- 
+
 // Rules
 function renderRules() {
   const list = document.getElementById('ruleList');
@@ -924,7 +924,7 @@ function renderRules() {
       <button class="btn btn-sm btn-danger btn-icon" onclick="deleteRule(${i})">✕</button>
     </div>`).join('');
 }
- 
+
 function addRule() {
   const kw = document.getElementById('ruleKeyword').value.trim().toUpperCase();
   const cat = document.getElementById('ruleCategory').value;
@@ -936,22 +936,22 @@ function addRule() {
   renderRules();
   toast('Rule added', 'success');
 }
- 
+
 function deleteRule(i) {
   state.rules.splice(i, 1);
   save();
   renderRules();
 }
- 
+
 // Setup
 function openSetup() {
   document.getElementById('gasUrl').value = state.gasUrl;
   document.getElementById('apiKey').value = state.apiKey;
   document.getElementById('setupModal').classList.add('open');
 }
- 
+
 function closeSetup() { document.getElementById('setupModal').classList.remove('open'); }
- 
+
 function saveSetup() {
   state.gasUrl = document.getElementById('gasUrl').value.trim();
   state.apiKey = document.getElementById('apiKey').value.trim();
@@ -960,7 +960,7 @@ function saveSetup() {
   updateSyncIndicator();
   toast('Settings saved', 'success');
 }
- 
+
 // Sync
 function updateSyncIndicator() {
   const dot = document.getElementById('syncDot');
@@ -973,29 +973,26 @@ function updateSyncIndicator() {
     label.textContent = lastSync ? `Synced ${lastSync}` : 'Synced';
   }
 }
- 
+
 async function syncToSheets() {
   if (!state.gasUrl) { openSetup(); return; }
   const btn = document.getElementById('syncBtn');
   btn.textContent = '↻ Syncing...';
   btn.disabled = true;
   document.getElementById('syncDot').className = 'sync-dot syncing';
- 
+
   try {
-    // Step 1: Pull from Sheets first
-    const pullRes = await fetch(state.gasUrl + '?action=pull');
-    if (pullRes.ok) {
-      const pullData = await pullRes.json();
+    // Step 1: Pull from Sheets first using JSONP (works on mobile)
+    try {
+      const pullData = await jsonpPull(state.gasUrl);
       if (pullData.ok && pullData.transactions && pullData.transactions.length > 0) {
-        // Merge: remote wins for existing IDs, local unsynced take priority
         const localIds = new Set(state.transactions.map(t => t.id));
         const remoteNew = pullData.transactions.filter(t => !localIds.has(t.id));
-        // Add remote transactions that don't exist locally
         state.transactions = [...state.transactions, ...remoteNew];
       }
-    }
- 
-    // Step 2: Push all local data (including newly pulled) to Sheets
+    } catch(pullErr) { /* continue even if pull fails */ }
+
+    // Step 2: Push all local data to Sheets
     const payload = { action: 'sync', transactions: state.transactions, summary: buildSummary() };
     await fetch(state.gasUrl, {
       method: 'POST',
@@ -1003,7 +1000,7 @@ async function syncToSheets() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
- 
+
     state.unsyncedIds.clear();
     state.lastSync = new Date().toISOString();
     save();
@@ -1017,14 +1014,34 @@ async function syncToSheets() {
   btn.textContent = '⇅ Sync';
   btn.disabled = false;
 }
- 
+
+// JSONP pull — works across origins on mobile browsers
+function jsonpPull(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = 'budgetCb_' + Date.now();
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      delete window[cbName];
+      if (script.parentNode) document.body.removeChild(script);
+      reject(new Error('JSONP timeout'));
+    }, 10000);
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) document.body.removeChild(script);
+      resolve(data);
+    };
+    script.src = url + '?action=pull&callback=' + cbName;
+    script.onerror = () => { clearTimeout(timer); reject(new Error('JSONP error')); };
+    document.body.appendChild(script);
+  });
+}
+
 // Auto-pull on startup if configured
 async function autoPullOnStart() {
   if (!state.gasUrl) return;
   try {
-    const res = await fetch(state.gasUrl + '?action=pull');
-    if (!res.ok) return;
-    const data = await res.json();
+    const data = await jsonpPull(state.gasUrl);
     if (!data.ok || !data.transactions) return;
     const localIds = new Set(state.transactions.map(t => t.id));
     const remoteNew = data.transactions.filter(t => !localIds.has(t.id));
@@ -1040,7 +1057,7 @@ async function autoPullOnStart() {
     // Silent fail on auto-pull
   }
 }
- 
+
 function buildSummary() {
   const allKeys = [...new Set(state.transactions.map(t => t.date.slice(0,7)))].sort();
   const rows = EXPENSE_CATS.map(cat => {
@@ -1059,7 +1076,7 @@ function buildSummary() {
   });
   return { months: allKeys, rows: [...rows, expRow, incRow] };
 }
- 
+
 // Toast
 function toast(msg, type = '') {
   const el = document.getElementById('toast');
@@ -1068,7 +1085,7 @@ function toast(msg, type = '') {
   clearTimeout(el._t);
   el._t = setTimeout(() => el.className = 'toast', 3000);
 }
- 
+
 init();
 </script>
 </body>
