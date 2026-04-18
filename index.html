@@ -1007,36 +1007,6 @@ async function syncToSheets() {
   btn.disabled = false;
 }
 
-// Manual pull button
-async function manualPull() {
-  if (!state.gasUrl) { openSetup(); return; }
-  const btn = document.getElementById('pullBtn');
-  btn.textContent = '↓ Pulling...';
-  btn.disabled = true;
-  try {
-    const data = await jsonpPull(state.gasUrl);
-    if (!data.ok || !data.transactions) { toast('Pull failed', 'error'); return; }
-    const localIds = new Set(state.transactions.map(t => t.id));
-    const remoteNew = data.transactions
-      .filter(t => !localIds.has(t.id))
-      .map(t => ({ ...t, date: normalizeDate(t.date) }));
-    if (remoteNew.length > 0) {
-      state.transactions = [...state.transactions, ...remoteNew];
-      state.lastSync = new Date().toISOString();
-      save();
-      renderAll();
-      updateSyncIndicator();
-      toast('Pulled ' + remoteNew.length + ' new transactions!', 'success');
-    } else {
-      toast('Already up to date', '');
-    }
-  } catch(e) {
-    toast('Pull failed — check GAS URL', 'error');
-  }
-  btn.textContent = '↓ Pull';
-  btn.disabled = false;
-}
-
 // Normalize date to YYYY-MM-DD
 function normalizeDate(d) {
   if (!d) return '';
