@@ -437,7 +437,7 @@ function changeMonth(dir) {
 }
 
 function getMonthKey(y,m) { return `${y}-${String(m+1).padStart(2,'0')}`; }
-function monthTxs() { const k=getMonthKey(state.currentYear,state.currentMonth); return state.transactions.filter(t=>t.date&&t.date.startsWith(k)); }
+function monthTxs() { const k=getMonthKey(state.currentYear,state.currentMonth); return state.transactions.filter(t=>t.date&&t.date.startsWith(k)&&!t.deleted_at); }
 
 // Gestures
 function initGestures() {
@@ -477,7 +477,7 @@ function renderTransactions() {
   const cat=document.getElementById('filterCategory')?.value||'';
   const type=document.getElementById('filterType')?.value||'';
   const k=getMonthKey(state.currentYear,state.currentMonth);
-  let txs=state.transactions.filter(t=>t.date&&t.date.startsWith(k));
+  let txs=state.transactions.filter(t=>t.date&&t.date.startsWith(k)&&!t.deleted_at);
   if(search) txs=txs.filter(t=>(t.store||'').toLowerCase().includes(search)||(t.memo||'').toLowerCase().includes(search)||(t.category||'').toLowerCase().includes(search));
   if(cat) txs=txs.filter(t=>t.category===cat);
   if(type) txs=txs.filter(t=>t.type===type);
@@ -600,12 +600,7 @@ function saveTx() {
   }
   save();closeModal();renderAll();updateSyncIndicator();
 }
-function deleteTx(id) {
-  if(!confirm('Delete this transaction?')) return;
-  state.transactions=state.transactions.filter(x=>x.id!==id);
-  state.unsyncedIds.delete(id);
-  save();renderAll();updateSyncIndicator();toast('Deleted');
-}
+function deleteTx(id) { if(!confirm('Delete this transaction?')) return; const idx=state.transactions.findIndex(x=>x.id===id); if(idx>=0){state.transactions[idx].deleted_at=new Date().toISOString();state.unsyncedIds.add(id);} save();renderAll();updateSyncIndicator();toast('Deleted'); }
 
 // CSV Import
 async function handleCSV() {
