@@ -187,7 +187,8 @@
   .tx-card-store { font-size: 14px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tx-card-bottom { display: flex; align-items: center; gap: 6px; }
   .tx-card-memo { font-size: 11px; color: var(--text3); }
-  .tx-card-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .tx-card-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; width: auto; }
+  .tx-card-actions .btn { width: auto; }
 
   @media (max-width: 640px) {
     /* Layout */
@@ -222,7 +223,8 @@
 
     /* Transaction table — card style on mobile */
     .tx-table thead { display: none; }
-    .tx-table, .tx-table tbody, .tx-table tr, .tx-table td { display: block; width: 100%; }
+    .tx-table, .tx-table tbody, .tx-table tr { display: block; width: 100%; }
+    .tx-table td { display: block; }
     .tx-table tr { padding: 0; border-bottom: 1px solid var(--surface2); }
     .tx-table tr:last-child { border-bottom: none; }
     .tx-table tr:hover td { background: none; }
