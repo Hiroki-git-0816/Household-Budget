@@ -243,7 +243,7 @@ tr:hover .tx-actions { opacity: 1; }
     <div class="charts-grid">
       <div class="chart-card">
         <h3>Expense breakdown — <span id="breakdownMonthLabel"></span></h3>
-        <div class="chart-container" style="height:260px;"><canvas id="breakdownChart"></canvas></div>
+        <div class="chart-container" style="height:290px;"><canvas id="breakdownChart"></canvas></div>
         <div id="breakdownTable"></div>
       </div>
       <div class="chart-card">
@@ -565,29 +565,59 @@ function renderBreakdownChart() {
     return;
   }
   const labelPlugin={id:'doughnutLabels',afterDraw(chart){
-    const{ctx:c,data,width}=chart;
+    const{ctx:c,data,width,height}=chart;
     const meta=chart.getDatasetMeta(0);
     if(!meta?.data.length) return;
-    c.save();
-    c.font='11px system-ui,sans-serif';
-    const MARGIN=6;
+    const MARGIN=8,RADIAL=14,HORIZ=18,LINE_H=14,MIN_GAP=30;
+    // Collect items
+    const items=[];
     meta.data.forEach((arc,i)=>{
-      if(!data.datasets[0].data[i]||arc.endAngle-arc.startAngle<0.2) return;
+      if(!data.datasets[0].data[i]) return;
       const mid=(arc.startAngle+arc.endAngle)/2;
-      const r=arc.outerRadius,cx=arc.x,cy=arc.y,cos=Math.cos(mid),sin=Math.sin(mid);
-      const x1=cx+(r+4)*cos,y1=cy+(r+4)*sin;
-      const x2=cx+(r+14)*cos,y2=cy+(r+14)*sin;
-      // Limit horizontal extension to canvas boundary
-      const rawX3=x2+(cos>=0?18:-18);
-      const x3=cos>=0?Math.min(rawX3,width-MARGIN-50):Math.max(rawX3,MARGIN+50);
-      const col=data.datasets[0].backgroundColor[i];
-      c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.lineTo(x3,y2);
+      const r=arc.outerRadius,cos=Math.cos(mid),sin=Math.sin(mid);
+      const cx=arc.x,cy=arc.y;
+      items.push({i,cos,
+        ax:cx+(r+4)*cos, ay:cy+(r+4)*sin,   // arc edge point
+        ex:cx+(r+RADIAL)*cos,                 // elbow x (fixed)
+        rawY:cy+(r+RADIAL)*sin,               // elbow y (will adjust)
+        label:data.labels[i],
+        amt:'$'+data.datasets[0].data[i].toFixed(2),
+        col:data.datasets[0].backgroundColor[i],
+        right:cos>=0
+      });
+    });
+    // Spread labels per side to avoid overlap
+    function spread(group){
+      group.sort((a,b)=>a.rawY-b.rawY);
+      for(let i=1;i<group.length;i++){
+        if(group[i].rawY-group[i-1].rawY<MIN_GAP) group[i].rawY=group[i-1].rawY+MIN_GAP;
+      }
+      // Clamp top/bottom
+      const topLimit=LINE_H+MARGIN, botLimit=height-LINE_H-MARGIN;
+      group.forEach(it=>{it.rawY=Math.max(topLimit,Math.min(botLimit,it.rawY));});
+      // Backward pass to lift crowded top
+      for(let i=group.length-2;i>=0;i--){
+        if(group[i+1].rawY-group[i].rawY<MIN_GAP) group[i].rawY=group[i+1].rawY-MIN_GAP;
+      }
+    }
+    const right=items.filter(it=>it.right), left=items.filter(it=>!it.right);
+    spread(right); spread(left);
+    c.save();
+    [...right,...left].forEach(it=>{
+      const {ax,ay,ex,rawY,cos,col,label,amt,right:isR}=it;
+      const hx=isR?Math.min(ex+HORIZ,width-MARGIN-70):Math.max(ex-HORIZ,MARGIN+70);
+      // Leader line: arc edge → elbow → horizontal
+      c.beginPath();c.moveTo(ax,ay);c.lineTo(ex,rawY);c.lineTo(hx,rawY);
       c.strokeStyle=col;c.lineWidth=1.5;c.stroke();
-      c.beginPath();c.arc(x3,y2,2.5,0,Math.PI*2);c.fillStyle=col;c.fill();
-      const textX=x3+(cos>=0?MARGIN:-MARGIN);
-      const maxW=cos>=0?width-MARGIN-textX:textX-MARGIN;
-      c.fillStyle='#1a1917';c.textAlign=cos>=0?'left':'right';c.textBaseline='middle';
-      c.fillText(data.labels[i],textX,y2,Math.max(20,maxW));
+      c.beginPath();c.arc(hx,rawY,2.5,0,Math.PI*2);c.fillStyle=col;c.fill();
+      // Text
+      const tx=hx+(isR?MARGIN:-MARGIN);
+      const maxW=Math.max(20,isR?width-MARGIN-tx:tx-MARGIN);
+      c.textAlign=isR?'left':'right';c.textBaseline='middle';
+      c.font='11px system-ui,sans-serif';c.fillStyle='#1a1917';
+      c.fillText(label,tx,rawY-LINE_H/2,maxW);
+      c.font='11px monospace';c.fillStyle='#6b6860';
+      c.fillText(amt,tx,rawY+LINE_H/2,maxW);
     });
     c.restore();
   }};
@@ -605,7 +635,7 @@ function renderBreakdownChart() {
     c.fillText('$'+total.toFixed(0),cx,cy+10);
     c.restore();
   }};
-  charts.breakdown=new Chart(ctx,{type:'doughnut',data:{labels:entries.map(([k])=>k),datasets:[{data:entries.map(([,v])=>v),backgroundColor:entries.map(([k])=>CAT_COLORS[k]||'#888'),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:32,bottom:32,left:88,right:88}},plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>` ${c.label}: CAD ${c.raw.toFixed(2)}`}}},cutout:'62%'},plugins:[labelPlugin,centerPlugin]});
+  charts.breakdown=new Chart(ctx,{type:'doughnut',data:{labels:entries.map(([k])=>k),datasets:[{data:entries.map(([,v])=>v),backgroundColor:entries.map(([k])=>CAT_COLORS[k]||'#888'),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:36,bottom:36,left:96,right:96}},plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>` ${c.label}: CAD ${c.raw.toFixed(2)}`}}},cutout:'64%'},plugins:[labelPlugin,centerPlugin]});
   if(tableEl) tableEl.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:12px;"><thead><tr><th style="text-align:left;padding:5px 8px;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border);">Category</th><th style="text-align:right;padding:5px 8px;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border);">Amount</th></tr></thead><tbody>${entries.map(([cat,amt])=>`<tr><td style="padding:5px 8px;"><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[cat]||'#888'};flex-shrink:0;display:inline-block;"></span>${cat}</span></td><td style="padding:5px 8px;text-align:right;font-family:var(--font-mono);">CAD ${amt.toFixed(2)}</td></tr>`).join('')}<tr style="border-top:1px solid var(--border);"><td style="padding:6px 8px;font-weight:500;">Total</td><td style="padding:6px 8px;text-align:right;font-family:var(--font-mono);font-weight:500;">CAD ${total.toFixed(2)}</td></tr></tbody></table>`;
 }
 
