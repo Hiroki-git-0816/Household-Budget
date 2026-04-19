@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="44%" r="58%">
+      <stop offset="0%" stop-color="#474f68"/>
+      <stop offset="100%" stop-color="#1c2030"/>
+    </radialGradient>
+    <linearGradient id="walletGrad" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#818fb0"/>
+      <stop offset="100%" stop-color="#596080"/>
+    </linearGradient>
+    <linearGradient id="billGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7a8aaa"/>
+      <stop offset="100%" stop-color="#637090"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <!-- Subtle center glow -->
+  <ellipse cx="256" cy="236" rx="200" ry="176" fill="rgba(160,178,220,0.07)"/>
+
+  <!-- Bill 1: behind, tilted left -->
+  <g transform="rotate(-15, 224, 222)">
+    <rect x="122" y="162" width="204" height="120" rx="12" fill="url(#billGrad)" opacity="0.88"/>
+    <circle cx="224" cy="222" r="28" fill="rgba(255,255,255,0.06)"/>
+    <rect x="142" y="183" width="164" height="4" rx="2" fill="rgba(255,255,255,0.18)"/>
+    <rect x="142" y="258" width="164" height="4" rx="2" fill="rgba(255,255,255,0.18)"/>
+  </g>
+
+  <!-- Bill 2: middle, slight right tilt -->
+  <g transform="rotate(6, 260, 216)">
+    <rect x="148" y="158" width="204" height="120" rx="12" fill="#7282a2" opacity="0.88"/>
+    <circle cx="250" cy="218" r="28" fill="rgba(255,255,255,0.05)"/>
+    <rect x="168" y="178" width="160" height="4" rx="2" fill="rgba(255,255,255,0.15)"/>
+  </g>
+
+  <!-- Card: most tilted right -->
+  <g transform="rotate(20, 318, 200)">
+    <rect x="218" y="148" width="156" height="100" rx="12" fill="#626c8c" opacity="0.9"/>
+    <!-- Chip -->
+    <rect x="238" y="172" width="34" height="26" rx="5" fill="rgba(255,255,255,0.22)"/>
+    <!-- Mag stripe lines -->
+    <rect x="238" y="208" width="120" height="4" rx="2" fill="rgba(255,255,255,0.15)"/>
+    <rect x="238" y="220" width="80" height="4" rx="2" fill="rgba(255,255,255,0.12)"/>
+  </g>
+
+  <!-- Wallet shadow -->
+  <rect x="114" y="250" width="286" height="198" rx="22" fill="rgba(0,0,0,0.32)"/>
+
+  <!-- Wallet body -->
+  <rect x="108" y="240" width="286" height="198" rx="22" fill="url(#walletGrad)"/>
+
+  <!-- Top inner highlight (depth) -->
+  <rect x="108" y="240" width="286" height="44" rx="22" fill="rgba(255,255,255,0.10)"/>
+
+  <!-- Stitching top -->
+  <line x1="136" y1="269" x2="364" y2="269" stroke="rgba(255,255,255,0.52)" stroke-width="3.5" stroke-dasharray="13,8" stroke-linecap="round"/>
+  <!-- Stitching bottom -->
+  <line x1="136" y1="410" x2="364" y2="410" stroke="rgba(255,255,255,0.52)" stroke-width="3.5" stroke-dasharray="13,8" stroke-linecap="round"/>
+
+  <!-- Clasp tab -->
+  <rect x="380" y="308" width="50" height="72" rx="14" fill="#6070909" fill="#647090"/>
+  <rect x="382" y="310" width="46" height="68" rx="12" fill="#7080a0"/>
+
+  <!-- Snap button -->
+  <circle cx="405" cy="344" r="16" fill="#4e5e80"/>
+  <circle cx="405" cy="344" r="10" fill="#3e4e72"/>
+  <circle cx="405" cy="344" r="5"  fill="#2e3c60"/>
+</svg>
