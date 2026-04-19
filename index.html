@@ -243,7 +243,7 @@ tr:hover .tx-actions { opacity: 1; }
     <div class="charts-grid">
       <div class="chart-card">
         <h3>Expense breakdown — <span id="breakdownMonthLabel"></span></h3>
-        <div class="chart-container" style="height:240px;"><canvas id="breakdownChart"></canvas></div>
+        <div class="chart-container" style="height:260px;"><canvas id="breakdownChart"></canvas></div>
         <div id="breakdownTable"></div>
       </div>
       <div class="chart-card">
@@ -542,9 +542,9 @@ function renderTrendChart() {
   if(charts.trend) charts.trend.destroy();
   const ctx=document.getElementById('trendChart'); if(!ctx) return;
   charts.trend=new Chart(ctx,{type:'line',data:{labels,datasets:[
-    {label:'Income',data:inc,borderColor:'#1a6b4a',backgroundColor:'rgba(26,107,74,0.08)',tension:0.3,pointRadius:3,fill:false},
-    {label:'Expense',data:exp,borderColor:'#c45c1e',backgroundColor:'rgba(196,92,30,0.08)',tension:0.3,pointRadius:3,fill:false},
-    {label:'Balance',data:bal,borderColor:'#6b7eb8',backgroundColor:'rgba(107,126,184,0.08)',tension:0.3,pointRadius:3,fill:false,borderDash:[4,3]},
+    {label:'Income',data:inc,borderColor:'#1a6b4a',backgroundColor:'rgba(26,107,74,0.08)',tension:0,pointRadius:3,fill:false},
+    {label:'Expense',data:exp,borderColor:'#c45c1e',backgroundColor:'rgba(196,92,30,0.08)',tension:0,pointRadius:3,fill:false},
+    {label:'Balance',data:bal,borderColor:'#6b7eb8',backgroundColor:'rgba(107,126,184,0.08)',tension:0,pointRadius:3,fill:false,borderDash:[4,3]},
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,font:{size:12}}},tooltip:{callbacks:{label:(c)=>` ${c.dataset.label}: CAD ${c.raw.toFixed(2)}`}}},scales:{x:{grid:{display:false}},y:{ticks:{callback:v=>`$${v}`}}}}});
 }
 
@@ -565,28 +565,47 @@ function renderBreakdownChart() {
     return;
   }
   const labelPlugin={id:'doughnutLabels',afterDraw(chart){
-    const{ctx:c,data}=chart;
+    const{ctx:c,data,width}=chart;
     const meta=chart.getDatasetMeta(0);
     if(!meta?.data.length) return;
     c.save();
+    c.font='11px system-ui,sans-serif';
+    const MARGIN=6;
     meta.data.forEach((arc,i)=>{
       if(!data.datasets[0].data[i]||arc.endAngle-arc.startAngle<0.2) return;
       const mid=(arc.startAngle+arc.endAngle)/2;
       const r=arc.outerRadius,cx=arc.x,cy=arc.y,cos=Math.cos(mid),sin=Math.sin(mid);
       const x1=cx+(r+4)*cos,y1=cy+(r+4)*sin;
-      const x2=cx+(r+18)*cos,y2=cy+(r+18)*sin;
-      const x3=x2+(cos>=0?22:-22);
+      const x2=cx+(r+14)*cos,y2=cy+(r+14)*sin;
+      // Limit horizontal extension to canvas boundary
+      const rawX3=x2+(cos>=0?18:-18);
+      const x3=cos>=0?Math.min(rawX3,width-MARGIN-50):Math.max(rawX3,MARGIN+50);
       const col=data.datasets[0].backgroundColor[i];
       c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.lineTo(x3,y2);
       c.strokeStyle=col;c.lineWidth=1.5;c.stroke();
       c.beginPath();c.arc(x3,y2,2.5,0,Math.PI*2);c.fillStyle=col;c.fill();
-      c.fillStyle='#1a1917';c.font='11px system-ui,sans-serif';
-      c.textAlign=cos>=0?'left':'right';c.textBaseline='middle';
-      c.fillText(data.labels[i],x3+(cos>=0?6:-6),y2);
+      const textX=x3+(cos>=0?MARGIN:-MARGIN);
+      const maxW=cos>=0?width-MARGIN-textX:textX-MARGIN;
+      c.fillStyle='#1a1917';c.textAlign=cos>=0?'left':'right';c.textBaseline='middle';
+      c.fillText(data.labels[i],textX,y2,Math.max(20,maxW));
     });
     c.restore();
   }};
-  charts.breakdown=new Chart(ctx,{type:'doughnut',data:{labels:entries.map(([k])=>k),datasets:[{data:entries.map(([,v])=>v),backgroundColor:entries.map(([k])=>CAT_COLORS[k]||'#888'),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:24,bottom:24,left:60,right:60}},plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>` ${c.label}: CAD ${c.raw.toFixed(2)}`}}},cutout:'55%'},plugins:[labelPlugin]});
+  const centerPlugin={id:'centerText',afterDraw(chart){
+    const{ctx:c}=chart;
+    const meta=chart.getDatasetMeta(0);
+    if(!meta?.data.length) return;
+    const cx=meta.data[0].x,cy=meta.data[0].y;
+    const total=chart.data.datasets[0].data.reduce((s,v)=>s+v,0);
+    c.save();
+    c.textAlign='center';c.textBaseline='middle';
+    c.font='11px system-ui,sans-serif';c.fillStyle='#9e9b95';
+    c.fillText('Total',cx,cy-10);
+    c.font='600 14px system-ui,sans-serif';c.fillStyle='#1a1917';
+    c.fillText('$'+total.toFixed(0),cx,cy+10);
+    c.restore();
+  }};
+  charts.breakdown=new Chart(ctx,{type:'doughnut',data:{labels:entries.map(([k])=>k),datasets:[{data:entries.map(([,v])=>v),backgroundColor:entries.map(([k])=>CAT_COLORS[k]||'#888'),borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:32,bottom:32,left:88,right:88}},plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>` ${c.label}: CAD ${c.raw.toFixed(2)}`}}},cutout:'62%'},plugins:[labelPlugin,centerPlugin]});
   if(tableEl) tableEl.innerHTML=`<table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:12px;"><thead><tr><th style="text-align:left;padding:5px 8px;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border);">Category</th><th style="text-align:right;padding:5px 8px;color:var(--text3);font-weight:500;border-bottom:1px solid var(--border);">Amount</th></tr></thead><tbody>${entries.map(([cat,amt])=>`<tr><td style="padding:5px 8px;"><span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:${CAT_COLORS[cat]||'#888'};flex-shrink:0;display:inline-block;"></span>${cat}</span></td><td style="padding:5px 8px;text-align:right;font-family:var(--font-mono);">CAD ${amt.toFixed(2)}</td></tr>`).join('')}<tr style="border-top:1px solid var(--border);"><td style="padding:6px 8px;font-weight:500;">Total</td><td style="padding:6px 8px;text-align:right;font-family:var(--font-mono);font-weight:500;">CAD ${total.toFixed(2)}</td></tr></tbody></table>`;
 }
 
@@ -621,7 +640,7 @@ function renderCategoryTrendChart() {
   const datasets=catsWithData.filter(cat=>activeCats&&activeCats.has(cat)).map(cat=>({
     label:cat,
     data:months.map(({key})=>state.transactions.filter(t=>t.date?.startsWith(key)&&t.type==='Expense'&&t.category===cat&&!t.deleted_at).reduce((s,t)=>s+t.amount,0)),
-    borderColor:CAT_COLORS[cat]||'#888',backgroundColor:'transparent',tension:0.3,pointRadius:3,
+    borderColor:CAT_COLORS[cat]||'#888',backgroundColor:'transparent',tension:0,pointRadius:3,
   }));
   if(charts.catTrend) charts.catTrend.destroy();
   const ctx=document.getElementById('catTrendChart'); if(!ctx) return;
@@ -811,7 +830,7 @@ async function uploadToSheets(){
   btns.forEach(b=>{b.textContent='↻';b.disabled=true;});
   const dot=document.getElementById('syncDot'); if(dot) dot.className='sync-dot syncing';
   try{
-    await fetch(state.gasUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'sync',transactions:state.transactions,summary:buildSummary()})});
+    await fetch(state.gasUrl,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'sync',transactions:state.transactions,rules:state.rules,summary:buildSummary()})});
     state.unsyncedIds.clear();state.lastSync=new Date().toISOString();
     save();updateSyncIndicator();toast('Uploaded to Google Sheets!','success');
   }catch(e){toast('Upload failed — check GAS URL','error');if(dot) dot.className='sync-dot pending';}
@@ -862,7 +881,13 @@ async function pullFromSheets(){
         }
       }
     });
-    if(newTxs.length > 0 || deletedUpdated){
+    let rulesUpdated=false;
+    if(data.rules&&Array.isArray(data.rules)){
+      const localKws=new Set(state.rules.map(r=>r.keyword));
+      const newRules=data.rules.filter(r=>!localKws.has(r.keyword));
+      if(newRules.length>0){state.rules=[...state.rules,...newRules];rulesUpdated=true;}
+    }
+    if(newTxs.length > 0 || deletedUpdated || rulesUpdated){
       state.transactions = [...state.transactions, ...newTxs];
       state.lastSync = new Date().toISOString();
       save(); renderAll(); updateSyncIndicator();
@@ -890,6 +915,11 @@ async function autoPullOnStart(){
         if(normalized.deleted_at&&!existing.deleted_at){existing.deleted_at=normalized.deleted_at;deletedUpdated=true;}
       }
     });
+    if(data.rules&&Array.isArray(data.rules)){
+      const localKws=new Set(state.rules.map(r=>r.keyword));
+      const newRules=data.rules.filter(r=>!localKws.has(r.keyword));
+      if(newRules.length>0) state.rules=[...state.rules,...newRules];
+    }
     if(newTxs.length>0||deletedUpdated){
       state.transactions=[...state.transactions,...newTxs];
       state.lastSync=new Date().toISOString();
